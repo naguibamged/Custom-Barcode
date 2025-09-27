@@ -17,10 +17,18 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      /* Style for active tab and buttons */
       .control-active {
         background-color: #06b6d4 !important; /* cyan-500 */
         color: #111827 !important; /* gray-900 */
+      }
+      /* Hide the number input's default spinner arrows */
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
       }
       @media print {
         #controls-panel,
@@ -164,14 +172,24 @@
                 class="text-sm font-medium text-gray-300 col-span-1"
                 >Font Size</label
               >
-              <input
-                type="range"
-                id="font-size"
-                min="8"
-                max="48"
-                value="16"
-                class="col-span-2 block w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-              />
+              <div class="col-span-2 flex items-center gap-3">
+                <input
+                  type="range"
+                  id="font-size"
+                  min="8"
+                  max="48"
+                  value="16"
+                  class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                />
+                <input
+                  type="number"
+                  id="font-size-value"
+                  min="8"
+                  max="48"
+                  value="16"
+                  class="w-16 p-1 text-center bg-gray-800 border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
             </div>
 
             <div class="grid grid-cols-3 items-center gap-4">
@@ -341,7 +359,6 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- Get references to all interactive elements ---
         const textInputs = {
           top: document.getElementById("product-name"),
           bottom: document.getElementById("additional-info"),
@@ -352,33 +369,28 @@
         };
         const labelPreview = document.getElementById("label-preview");
 
-        // --- MODIFICATION 2: All new styling controls logic ---
         const styleControls = {
           fontSize: document.getElementById("font-size"),
+          fontSizeValue: document.getElementById("font-size-value"),
           fontWeightToggle: document.getElementById("font-weight-toggle"),
           textAlignButtons: document.getElementById("text-align-buttons"),
           tabTop: document.getElementById("tab-top"),
           tabBottom: document.getElementById("tab-bottom"),
         };
 
-        // State object to hold styles for each text element
         let styles = {
           top: { size: 16, weight: "normal", align: "center" },
           bottom: { size: 16, weight: "normal", align: "center" },
         };
-        let activeStyleTarget = "top"; // 'top' or 'bottom'
+        let activeStyleTarget = "top";
 
-        // --- Core Functions ---
         function updatePreview() {
-          // Apply text content
           previewElements.top.innerText = convertToArabicNumerals(
             textInputs.top.value
           );
           previewElements.bottom.innerText = convertToArabicNumerals(
             textInputs.bottom.value
           );
-
-          // Apply styles from the state object
           Object.keys(styles).forEach((key) => {
             const style = styles[key];
             const element = previewElements[key];
@@ -388,16 +400,14 @@
           });
         }
 
-        // Updates the control UI (slider, buttons) to match the current state
         function syncControlsToState() {
           const currentStyle = styles[activeStyleTarget];
           styleControls.fontSize.value = currentStyle.size;
-
+          styleControls.fontSizeValue.value = currentStyle.size;
           styleControls.fontWeightToggle.classList.toggle(
             "control-active",
             currentStyle.weight === "bold"
           );
-
           styleControls.textAlignButtons
             .querySelectorAll("button")
             .forEach((btn) => {
@@ -406,8 +416,6 @@
                 btn.dataset.align === currentStyle.align
               );
             });
-
-          // Update tab visuals
           styleControls.tabTop.classList.toggle(
             "control-active",
             activeStyleTarget === "top"
@@ -418,7 +426,6 @@
           );
         }
 
-        // --- Event Listeners for Styling ---
         styleControls.tabTop.addEventListener("click", () => {
           activeStyleTarget = "top";
           syncControlsToState();
@@ -429,16 +436,27 @@
           syncControlsToState();
         });
 
-        styleControls.fontSize.addEventListener("input", (e) => {
-          styles[activeStyleTarget].size = e.target.value;
+        // --- MODIFICATION 2: New handler to sync slider and number input ---
+        const handleFontSizeChange = (newValue) => {
+          const size = Math.max(8, Math.min(48, parseInt(newValue, 10) || 8));
+          styles[activeStyleTarget].size = size;
+          styleControls.fontSize.value = size;
+          styleControls.fontSizeValue.value = size;
           updatePreview();
-        });
+        };
+
+        styleControls.fontSize.addEventListener("input", (e) =>
+          handleFontSizeChange(e.target.value)
+        );
+        styleControls.fontSizeValue.addEventListener("input", (e) =>
+          handleFontSizeChange(e.target.value)
+        );
 
         styleControls.fontWeightToggle.addEventListener("click", () => {
           styles[activeStyleTarget].weight =
             styles[activeStyleTarget].weight === "bold" ? "normal" : "bold";
           updatePreview();
-          syncControlsToState(); // Update button visual state
+          syncControlsToState();
         });
 
         styleControls.textAlignButtons.addEventListener("click", (e) => {
@@ -446,16 +464,14 @@
           if (button && button.dataset.align) {
             styles[activeStyleTarget].align = button.dataset.align;
             updatePreview();
-            syncControlsToState(); // Update button visual states
+            syncControlsToState();
           }
         });
 
-        // Listen to text input changes
         Object.values(textInputs).forEach((input) =>
           input.addEventListener("input", updatePreview)
         );
 
-        // --- Rest of the script (Modal, Dimensions, Print) ---
         const dimControls = {
           width: document.getElementById("label-width"),
           height: document.getElementById("label-height"),
@@ -493,7 +509,6 @@
           );
         }
 
-        // Modal Logic
         const settingsButton = document.getElementById("settings-button");
         const settingsModal = document.getElementById("settings-modal");
         const closeModalButton = document.getElementById("close-modal-button");
@@ -514,7 +529,6 @@
         });
         printButton.addEventListener("click", () => window.print());
 
-        // --- Initial Calls ---
         updateDimensionsAndPrint();
         updatePreview();
         syncControlsToState();
