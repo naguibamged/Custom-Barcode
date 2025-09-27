@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Thermal Label Designer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      /* Style for active tab and buttons */
+      .control-active {
+        background-color: #06b6d4 !important; /* cyan-500 */
+        color: #111827 !important; /* gray-900 */
+      }
+      @media print {
+        #controls-panel,
+        #settings-modal {
+          display: none;
+        }
+        .print-hidden {
+          display: none !important;
+        }
+        body,
+        .w-full.max-w-6xl {
+          margin: 0 !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+          background: none !important;
+        }
+        .w-full.max-w-6xl {
+          display: block;
+        }
+        #print-area {
+          position: static;
+          padding: 0;
+          margin: 0;
+        }
+        #label-preview {
+          margin: 0 !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+          border: none !important;
+          transform: scale(1) !important;
+          box-sizing: border-box;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8"
+  >
+    <div
+      class="w-full max-w-6xl bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8"
+    >
+      <div id="controls-panel" class="flex flex-col space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-3xl font-bold text-cyan-400">
+              Thermal Label Designer
+            </h1>
+            <p class="text-gray-400 mt-1">
+              Customize your label below and print it.
+            </p>
+          </div>
+          <button
+            id="settings-button"
+            class="p-2 rounded-full hover:bg-gray-700 transition-colors"
+            aria-label="Open settings"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="bg-gray-700 p-4 rounded-lg">
+          <h2 class="text-lg font-semibold mb-3 border-b border-gray-600 pb-2">
+            Label Content
+          </h2>
+          <div class="space-y-4">
+            <div>
+              <label
+                for="product-name"
+                class="block text-sm font-medium text-gray-300"
+                >Top Line Text</label
+              >
+              <textarea
+                id="product-name"
+                rows="2"
+                class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
+                placeholder="My Awesome Product"
+                dir="auto"
+              ></textarea>
+            </div>
+            <div>
+              <label
+                for="additional-info"
+                class="block text-sm font-medium text-gray-300"
+                >Bottom Line Text</label
+              >
+              <textarea
+                id="additional-info"
+                rows="2"
+                class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
+                placeholder="SKU: 12345678"
+                dir="auto"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-700 p-4 rounded-lg space-y-4">
+          <div
+            class="flex items-center justify-between border-b border-gray-600 pb-2"
+          >
+            <h2 class="text-lg font-semibold">Styling</h2>
+            <div id="styling-tabs" class="flex p-1 bg-gray-800 rounded-lg">
+              <button
+                id="tab-top"
+                class="px-3 py-1 text-sm font-medium rounded-md control-active"
+              >
+                Top Line
+              </button>
+              <button
+                id="tab-bottom"
+                class="px-3 py-1 text-sm font-medium rounded-md"
+              >
+                Bottom Line
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label
+                for="font-size"
+                class="text-sm font-medium text-gray-300 col-span-1"
+                >Font Size</label
+              >
+              <input
+                type="range"
+                id="font-size"
+                min="8"
+                max="48"
+                value="16"
+                class="col-span-2 block w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label class="text-sm font-medium text-gray-300 col-span-1"
+                >Style</label
+              >
+              <div class="col-span-2 flex items-center gap-2">
+                <button
+                  id="font-weight-toggle"
+                  class="p-2 w-10 h-10 bg-gray-800 rounded-md flex items-center justify-center font-bold text-lg hover:bg-gray-600"
+                >
+                  B
+                </button>
+                <div
+                  id="text-align-buttons"
+                  class="flex items-center bg-gray-800 rounded-md"
+                >
+                  <button
+                    data-align="left"
+                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-l-md"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 9.75A.75.75 0 012.75 9h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 9.75zM2.75 14a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H2.75z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    data-align="center"
+                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM4.75 9a.75.75 0 01.75-.75h8.5a.75.75 0 010 1.5h-8.5A.75.75 0 014.75 9zm-2 4.75A.75.75 0 012.75 13h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    data-align="right"
+                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-r-md"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 9.75A.75.75 0 012.75 9h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 9.75zm14.5 4.5a.75.75 0 000-1.5H2.75a.75.75 0 000 1.5h14.5z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          id="print-button"
+          class="w-full bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-bold py-3 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          Print Label
+        </button>
+      </div>
+
+      <div
+        class="flex items-center justify-center bg-gray-900/50 rounded-lg p-4"
+        id="print-area"
+      >
+        <div
+          id="label-preview"
+          class="bg-white rounded-lg shadow-xl overflow-hidden p-2 transition-all duration-300 ease-in-out transform scale-100 flex flex-col justify-between relative"
+        >
+          <div
+            id="preview-text"
+            class="text-black break-words"
+            dir="auto"
+          ></div>
+          <hr
+            class="absolute top-1/2 left-0 w-full -translate-y-1/2 border-t border-dashed border-gray-400 print-hidden"
+          />
+          <div
+            id="preview-additional-info"
+            class="text-black break-words w-full"
+            dir="auto"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="settings-modal"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md relative"
+      >
+        <button
+          id="close-modal-button"
+          class="absolute top-4 right-4 text-gray-400 hover:text-white"
+          aria-label="Close settings"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-6">Settings</h2>
+        <div class="bg-gray-700 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold mb-3 border-b border-gray-600 pb-2">
+            Label Dimensions
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                for="label-width"
+                class="block text-sm font-medium text-gray-300"
+                >Width (inches)</label
+              >
+              <input
+                type="number"
+                id="label-width"
+                value="2.25"
+                step="0.1"
+                class="mt-1 block w-full bg-gray-900 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
+              />
+            </div>
+            <div>
+              <label
+                for="label-height"
+                class="block text-sm font-medium text-gray-300"
+                >Height (inches)</label
+              >
+              <input
+                type="number"
+                id="label-height"
+                value="1.25"
+                step="0.1"
+                class="mt-1 block w-full bg-gray-900 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Get references to all interactive elements ---
+        const textInputs = {
+          top: document.getElementById("product-name"),
+          bottom: document.getElementById("additional-info"),
+        };
+        const previewElements = {
+          top: document.getElementById("preview-text"),
+          bottom: document.getElementById("preview-additional-info"),
+        };
+        const labelPreview = document.getElementById("label-preview");
+
+        // --- MODIFICATION 2: All new styling controls logic ---
+        const styleControls = {
+          fontSize: document.getElementById("font-size"),
+          fontWeightToggle: document.getElementById("font-weight-toggle"),
+          textAlignButtons: document.getElementById("text-align-buttons"),
+          tabTop: document.getElementById("tab-top"),
+          tabBottom: document.getElementById("tab-bottom"),
+        };
+
+        // State object to hold styles for each text element
+        let styles = {
+          top: { size: 16, weight: "normal", align: "center" },
+          bottom: { size: 16, weight: "normal", align: "center" },
+        };
+        let activeStyleTarget = "top"; // 'top' or 'bottom'
+
+        // --- Core Functions ---
+        function updatePreview() {
+          // Apply text content
+          previewElements.top.innerText = convertToArabicNumerals(
+            textInputs.top.value
+          );
+          previewElements.bottom.innerText = convertToArabicNumerals(
+            textInputs.bottom.value
+          );
+
+          // Apply styles from the state object
+          Object.keys(styles).forEach((key) => {
+            const style = styles[key];
+            const element = previewElements[key];
+            element.style.fontSize = `${style.size}px`;
+            element.style.fontWeight = style.weight;
+            element.style.textAlign = style.align;
+          });
+        }
+
+        // Updates the control UI (slider, buttons) to match the current state
+        function syncControlsToState() {
+          const currentStyle = styles[activeStyleTarget];
+          styleControls.fontSize.value = currentStyle.size;
+
+          styleControls.fontWeightToggle.classList.toggle(
+            "control-active",
+            currentStyle.weight === "bold"
+          );
+
+          styleControls.textAlignButtons
+            .querySelectorAll("button")
+            .forEach((btn) => {
+              btn.classList.toggle(
+                "control-active",
+                btn.dataset.align === currentStyle.align
+              );
+            });
+
+          // Update tab visuals
+          styleControls.tabTop.classList.toggle(
+            "control-active",
+            activeStyleTarget === "top"
+          );
+          styleControls.tabBottom.classList.toggle(
+            "control-active",
+            activeStyleTarget === "bottom"
+          );
+        }
+
+        // --- Event Listeners for Styling ---
+        styleControls.tabTop.addEventListener("click", () => {
+          activeStyleTarget = "top";
+          syncControlsToState();
+        });
+
+        styleControls.tabBottom.addEventListener("click", () => {
+          activeStyleTarget = "bottom";
+          syncControlsToState();
+        });
+
+        styleControls.fontSize.addEventListener("input", (e) => {
+          styles[activeStyleTarget].size = e.target.value;
+          updatePreview();
+        });
+
+        styleControls.fontWeightToggle.addEventListener("click", () => {
+          styles[activeStyleTarget].weight =
+            styles[activeStyleTarget].weight === "bold" ? "normal" : "bold";
+          updatePreview();
+          syncControlsToState(); // Update button visual state
+        });
+
+        styleControls.textAlignButtons.addEventListener("click", (e) => {
+          const button = e.target.closest("button");
+          if (button && button.dataset.align) {
+            styles[activeStyleTarget].align = button.dataset.align;
+            updatePreview();
+            syncControlsToState(); // Update button visual states
+          }
+        });
+
+        // Listen to text input changes
+        Object.values(textInputs).forEach((input) =>
+          input.addEventListener("input", updatePreview)
+        );
+
+        // --- Rest of the script (Modal, Dimensions, Print) ---
+        const dimControls = {
+          width: document.getElementById("label-width"),
+          height: document.getElementById("label-height"),
+        };
+        const dynamicPrintStyles = document.createElement("style");
+        document.head.appendChild(dynamicPrintStyles);
+
+        function updateDimensionsAndPrint() {
+          const widthIn = parseFloat(dimControls.width.value) || 2.25;
+          const heightIn = parseFloat(dimControls.height.value) || 1.25;
+          labelPreview.style.width = `${widthIn * 96}px`;
+          labelPreview.style.height = `${heightIn * 96}px`;
+          dynamicPrintStyles.innerHTML = `@media print { @page { size: ${widthIn}in ${heightIn}in; margin: 0; } }`;
+        }
+        Object.values(dimControls).forEach((control) =>
+          control.addEventListener("input", updateDimensionsAndPrint)
+        );
+
+        function convertToArabicNumerals(text) {
+          const arabicNumerals = [
+            "٠",
+            "١",
+            "٢",
+            "٣",
+            "٤",
+            "٥",
+            "٦",
+            "٧",
+            "٨",
+            "٩",
+          ];
+          return String(text).replace(
+            /[0-9]/g,
+            (digit) => arabicNumerals[parseInt(digit)]
+          );
+        }
+
+        // Modal Logic
+        const settingsButton = document.getElementById("settings-button");
+        const settingsModal = document.getElementById("settings-modal");
+        const closeModalButton = document.getElementById("close-modal-button");
+        const printButton = document.getElementById("print-button");
+
+        settingsButton.addEventListener("click", () =>
+          settingsModal.classList.remove("hidden")
+        );
+        closeModalButton.addEventListener("click", () =>
+          settingsModal.classList.add("hidden")
+        );
+        settingsModal.addEventListener("click", (e) => {
+          if (e.target === settingsModal) settingsModal.classList.add("hidden");
+        });
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !settingsModal.classList.contains("hidden"))
+            settingsModal.classList.add("hidden");
+        });
+        printButton.addEventListener("click", () => window.print());
+
+        // --- Initial Calls ---
+        updateDimensionsAndPrint();
+        updatePreview();
+        syncControlsToState();
+      });
+    </script>
+  </body>
+</html>
