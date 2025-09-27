@@ -21,7 +21,6 @@
         background-color: #06b6d4 !important; /* cyan-500 */
         color: #111827 !important; /* gray-900 */
       }
-      /* Hide the number input's default spinner arrows */
       input[type="number"]::-webkit-inner-spin-button,
       input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
@@ -115,29 +114,29 @@
           <div class="space-y-4">
             <div>
               <label
-                for="product-name"
+                for="text-label1"
                 class="block text-sm font-medium text-gray-300"
-                >Top Line Text</label
+                >Label 1 Text</label
               >
               <textarea
-                id="product-name"
+                id="text-label1"
                 rows="2"
                 class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
-                placeholder="My Awesome Product"
+                placeholder="Text for the top label..."
                 dir="auto"
               ></textarea>
             </div>
             <div>
               <label
-                for="additional-info"
+                for="text-label2"
                 class="block text-sm font-medium text-gray-300"
-                >Bottom Line Text</label
+                >Label 2 Text</label
               >
               <textarea
-                id="additional-info"
+                id="text-label2"
                 rows="2"
                 class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
-                placeholder="SKU: 12345678"
+                placeholder="Text for the bottom label..."
                 dir="auto"
               ></textarea>
             </div>
@@ -151,16 +150,16 @@
             <h2 class="text-lg font-semibold">Styling</h2>
             <div id="styling-tabs" class="flex p-1 bg-gray-800 rounded-lg">
               <button
-                id="tab-top"
+                id="tab-label1"
                 class="px-3 py-1 text-sm font-medium rounded-md control-active"
               >
-                Top Line
+                Label 1
               </button>
               <button
-                id="tab-bottom"
+                id="tab-label2"
                 class="px-3 py-1 text-sm font-medium rounded-md"
               >
-                Bottom Line
+                Label 2
               </button>
             </div>
           </div>
@@ -196,7 +195,7 @@
               <label class="text-sm font-medium text-gray-300 col-span-1"
                 >Style</label
               >
-              <div class="col-span-2 flex items-center gap-2">
+              <div class="col-span-2 flex items-center gap-2 flex-wrap">
                 <button
                   id="font-weight-toggle"
                   class="p-2 w-10 h-10 bg-gray-800 rounded-md flex items-center justify-center font-bold text-lg hover:bg-gray-600"
@@ -210,6 +209,7 @@
                   <button
                     data-align="left"
                     class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-l-md"
+                    title="Align Left"
                   >
                     <svg
                       class="w-5 h-5"
@@ -225,6 +225,7 @@
                   <button
                     data-align="center"
                     class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600"
+                    title="Align Center"
                   >
                     <svg
                       class="w-5 h-5"
@@ -240,6 +241,7 @@
                   <button
                     data-align="right"
                     class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-r-md"
+                    title="Align Right"
                   >
                     <svg
                       class="w-5 h-5"
@@ -250,6 +252,68 @@
                         fill-rule="evenodd"
                         d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 9.75A.75.75 0 012.75 9h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 9.75zm14.5 4.5a.75.75 0 000-1.5H2.75a.75.75 0 000 1.5h14.5z"
                       />
+                    </svg>
+                  </button>
+                </div>
+                <div
+                  id="vertical-align-buttons"
+                  class="flex items-center bg-gray-800 rounded-md"
+                >
+                  <button
+                    data-v-align="start"
+                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-l-md"
+                    title="Align Top"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 4h18M3 8h18M9 14h6v-4H9v4z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    data-v-align="center"
+                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600"
+                    title="Align Middle"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6M3 4h18M3 20h18"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    data-v-align="end"
+                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-r-md"
+                    title="Align Bottom"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 20h18M3 16h18M9 10h6V6H9v4z"
+                      ></path>
                     </svg>
                   </button>
                 </div>
@@ -272,19 +336,19 @@
       >
         <div
           id="label-preview"
-          class="bg-white rounded-lg shadow-xl overflow-hidden p-2 transition-all duration-300 ease-in-out transform scale-100 flex flex-col justify-between relative"
+          class="bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 ease-in-out transform scale-100 flex flex-col relative"
         >
           <div
-            id="preview-text"
-            class="text-black break-words"
+            id="preview-label1"
+            class="text-black break-words h-1/2 p-2 box-border grid"
             dir="auto"
           ></div>
           <hr
             class="absolute top-1/2 left-0 w-full -translate-y-1/2 border-t border-dashed border-gray-400 print-hidden"
           />
           <div
-            id="preview-additional-info"
-            class="text-black break-words w-full"
+            id="preview-label2"
+            class="text-black break-words h-1/2 p-2 box-border grid"
             dir="auto"
           ></div>
         </div>
@@ -321,7 +385,7 @@
         <h2 class="text-2xl font-bold text-cyan-400 mb-6">Settings</h2>
         <div class="bg-gray-700 p-4 rounded-lg">
           <h3 class="text-lg font-semibold mb-3 border-b border-gray-600 pb-2">
-            Label Dimensions
+            Page Dimensions
           </h3>
           <div class="grid grid-cols-2 gap-4">
             <div>
@@ -360,12 +424,12 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const textInputs = {
-          top: document.getElementById("product-name"),
-          bottom: document.getElementById("additional-info"),
+          label1: document.getElementById("text-label1"),
+          label2: document.getElementById("text-label2"),
         };
         const previewElements = {
-          top: document.getElementById("preview-text"),
-          bottom: document.getElementById("preview-additional-info"),
+          label1: document.getElementById("preview-label1"),
+          label2: document.getElementById("preview-label2"),
         };
         const labelPreview = document.getElementById("label-preview");
 
@@ -374,29 +438,48 @@
           fontSizeValue: document.getElementById("font-size-value"),
           fontWeightToggle: document.getElementById("font-weight-toggle"),
           textAlignButtons: document.getElementById("text-align-buttons"),
-          tabTop: document.getElementById("tab-top"),
-          tabBottom: document.getElementById("tab-bottom"),
+          verticalAlignButtons: document.getElementById(
+            "vertical-align-buttons"
+          ),
+          tabLabel1: document.getElementById("tab-label1"),
+          tabLabel2: document.getElementById("tab-label2"),
         };
 
         let styles = {
-          top: { size: 16, weight: "normal", align: "center" },
-          bottom: { size: 16, weight: "normal", align: "center" },
+          label1: {
+            size: 16,
+            weight: "normal",
+            align: "center",
+            v_align: "start",
+          },
+          label2: {
+            size: 16,
+            weight: "normal",
+            align: "center",
+            v_align: "start",
+          },
         };
-        let activeStyleTarget = "top";
+        let activeStyleTarget = "label1";
 
         function updatePreview() {
-          previewElements.top.innerText = convertToArabicNumerals(
-            textInputs.top.value
-          );
-          previewElements.bottom.innerText = convertToArabicNumerals(
-            textInputs.bottom.value
-          );
-          Object.keys(styles).forEach((key) => {
+          Object.keys(textInputs).forEach((key) => {
             const style = styles[key];
             const element = previewElements[key];
-            element.style.fontSize = `${style.size}px`;
-            element.style.fontWeight = style.weight;
-            element.style.textAlign = style.align;
+            const textContent = convertToArabicNumerals(textInputs[key].value);
+
+            element.innerHTML = `<span>${textContent}</span>`;
+
+            const span = element.querySelector("span");
+            if (span) {
+              span.style.fontSize = `${style.size}px`;
+              span.style.fontWeight = style.weight;
+            }
+
+            // --- MODIFICATION: Use separate, physical alignment properties ---
+            // 'align-items' handles vertical alignment (start, center, end)
+            element.style.alignItems = style.v_align;
+            // 'justify-items' handles physical horizontal alignment (left, center, right)
+            element.style.justifyItems = style.align;
           });
         }
 
@@ -416,27 +499,33 @@
                 btn.dataset.align === currentStyle.align
               );
             });
-          styleControls.tabTop.classList.toggle(
+          styleControls.verticalAlignButtons
+            .querySelectorAll("button")
+            .forEach((btn) => {
+              btn.classList.toggle(
+                "control-active",
+                btn.dataset.vAlign === currentStyle.v_align
+              );
+            });
+          styleControls.tabLabel1.classList.toggle(
             "control-active",
-            activeStyleTarget === "top"
+            activeStyleTarget === "label1"
           );
-          styleControls.tabBottom.classList.toggle(
+          styleControls.tabLabel2.classList.toggle(
             "control-active",
-            activeStyleTarget === "bottom"
+            activeStyleTarget === "label2"
           );
         }
 
-        styleControls.tabTop.addEventListener("click", () => {
-          activeStyleTarget = "top";
+        styleControls.tabLabel1.addEventListener("click", () => {
+          activeStyleTarget = "label1";
+          syncControlsToState();
+        });
+        styleControls.tabLabel2.addEventListener("click", () => {
+          activeStyleTarget = "label2";
           syncControlsToState();
         });
 
-        styleControls.tabBottom.addEventListener("click", () => {
-          activeStyleTarget = "bottom";
-          syncControlsToState();
-        });
-
-        // --- MODIFICATION 2: New handler to sync slider and number input ---
         const handleFontSizeChange = (newValue) => {
           const size = Math.max(8, Math.min(48, parseInt(newValue, 10) || 8));
           styles[activeStyleTarget].size = size;
@@ -468,6 +557,15 @@
           }
         });
 
+        styleControls.verticalAlignButtons.addEventListener("click", (e) => {
+          const button = e.target.closest("button");
+          if (button && button.dataset.vAlign) {
+            styles[activeStyleTarget].v_align = button.dataset.vAlign;
+            updatePreview();
+            syncControlsToState();
+          }
+        });
+
         Object.values(textInputs).forEach((input) =>
           input.addEventListener("input", updatePreview)
         );
@@ -478,7 +576,6 @@
         };
         const dynamicPrintStyles = document.createElement("style");
         document.head.appendChild(dynamicPrintStyles);
-
         function updateDimensionsAndPrint() {
           const widthIn = parseFloat(dimControls.width.value) || 2.25;
           const heightIn = parseFloat(dimControls.height.value) || 1.25;
@@ -489,7 +586,6 @@
         Object.values(dimControls).forEach((control) =>
           control.addEventListener("input", updateDimensionsAndPrint)
         );
-
         function convertToArabicNumerals(text) {
           const arabicNumerals = [
             "٠",
@@ -508,12 +604,10 @@
             (digit) => arabicNumerals[parseInt(digit)]
           );
         }
-
         const settingsButton = document.getElementById("settings-button");
         const settingsModal = document.getElementById("settings-modal");
         const closeModalButton = document.getElementById("close-modal-button");
         const printButton = document.getElementById("print-button");
-
         settingsButton.addEventListener("click", () =>
           settingsModal.classList.remove("hidden")
         );
@@ -528,7 +622,6 @@
             settingsModal.classList.add("hidden");
         });
         printButton.addEventListener("click", () => window.print());
-
         updateDimensionsAndPrint();
         updatePreview();
         syncControlsToState();
