@@ -606,9 +606,10 @@
             let svgPositionStyle = "display:none;";
 
             if (current_state.svg_name !== "none" && svgContent) {
-              const sizeWithGap = current_state.svg_size + 8;
+              const sizeWithGap = parseInt(current_state.svg_size, 10) + 8;
               const totalSvgWidth =
-                (current_state.svg_size + 2) * current_state.svg_count;
+                (parseInt(current_state.svg_size, 10) + 2) *
+                current_state.svg_count;
               switch (current_state.svg_position) {
                 case "left":
                   svgPositionStyle = `position:absolute; left:4px; top:0; bottom:0; display:flex; flex-wrap:nowrap; align-items:center; gap:2px;`;
