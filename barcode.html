@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale-1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom Thermal Label Designer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -166,6 +166,29 @@
                 />
               </div>
             </div>
+
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label for="line-spacing" class="text-sm col-span-1"
+                >Line Spacing</label
+              >
+              <div class="col-span-2 flex items-center gap-3">
+                <input
+                  type="range"
+                  id="line-spacing"
+                  min="0.8"
+                  max="3"
+                  step="0.1"
+                  value="1.5"
+                  class="w-full"
+                />
+                <span
+                  id="line-spacing-value"
+                  class="w-16 p-1 text-center bg-gray-800 rounded-md"
+                  >1.5</span
+                >
+              </div>
+            </div>
+
             <div class="grid grid-cols-3 items-center gap-4">
               <label class="text-sm col-span-1">Text Style</label>
               <div class="col-span-2 flex items-center gap-2 flex-wrap">
@@ -506,6 +529,8 @@
           },
           fontSize: document.getElementById("font-size"),
           fontSizeValue: document.getElementById("font-size-value"),
+          lineSpacing: document.getElementById("line-spacing"),
+          lineSpacingValue: document.getElementById("line-spacing-value"),
           fontWeightToggle: document.getElementById("font-weight-toggle"),
           textAlignButtons: document.getElementById("text-align-buttons"),
           verticalAlignButtons: document.getElementById(
@@ -535,6 +560,7 @@
             weight: "normal",
             align: "center",
             v_align: "start",
+            line_height: 1.5,
             svg_name: "none",
             svg_count: 1,
             svg_position: "left",
@@ -545,6 +571,7 @@
             weight: "normal",
             align: "center",
             v_align: "start",
+            line_height: 1.5,
             svg_name: "none",
             svg_count: 1,
             svg_position: "left",
@@ -558,13 +585,15 @@
           Object.keys(previewElements).forEach((key) => {
             const current_state = state[key];
             const element = previewElements[key];
-            const textContent = convertToArabicNumerals(textInputs[key].value);
+            const rawText = textInputs[key].value;
+            const textWithBreaks = rawText.replace(/\n/g, "<br>");
+            const textContent = convertToArabicNumerals(textWithBreaks);
             const selectedSvgData = svgLibrary.find(
               (item) => item.name === current_state.svg_name
             );
 
-            element.style.position = "relative"; // Parent must be relative for absolute positioning of children
-            element.innerHTML = ""; // Clear previous content
+            element.style.position = "relative";
+            element.innerHTML = "";
 
             let svgContent = "";
             if (selectedSvgData) {
@@ -577,19 +606,17 @@
             let svgPositionStyle = "display:none;";
 
             if (current_state.svg_name !== "none" && svgContent) {
-              const sizeWithGap = current_state.svg_size + 8; // 8px for gap
+              const sizeWithGap = current_state.svg_size + 8;
+              const totalSvgWidth =
+                (current_state.svg_size + 2) * current_state.svg_count;
               switch (current_state.svg_position) {
                 case "left":
-                  svgPositionStyle = `position:absolute; left:4px; top:0; bottom:0; display:flex; flex-wrap:wrap; align-items:center; gap:2px;`;
-                  textPadding = `padding-left: ${
-                    sizeWithGap * current_state.svg_count
-                  }px;`;
+                  svgPositionStyle = `position:absolute; left:4px; top:0; bottom:0; display:flex; flex-wrap:nowrap; align-items:center; gap:2px;`;
+                  textPadding = `padding-left: ${totalSvgWidth + 4}px;`;
                   break;
                 case "right":
-                  svgPositionStyle = `position:absolute; right:4px; top:0; bottom:0; display:flex; flex-wrap:wrap; align-items:center; gap:2px;`;
-                  textPadding = `padding-right: ${
-                    sizeWithGap * current_state.svg_count
-                  }px;`;
+                  svgPositionStyle = `position:absolute; right:4px; top:0; bottom:0; display:flex; flex-wrap:nowrap; align-items:center; gap:2px;`;
+                  textPadding = `padding-right: ${totalSvgWidth + 4}px;`;
                   break;
                 case "top":
                   svgPositionStyle = `position:absolute; top:4px; left:0; right:0; display:flex; justify-content:center; align-items:center; gap:2px;`;
@@ -602,7 +629,7 @@
               }
             }
 
-            const textContainer = `<div class="text-container" style="${textPadding} width:100%; height:100%; display:grid; font-size:${current_state.size}px; font-weight:${current_state.weight}; align-items:${current_state.v_align}; justify-items:${current_state.align};"><span>${textContent}</span></div>`;
+            const textContainer = `<div class="text-container" style="${textPadding} width:100%; height:100%; display:grid; font-size:${current_state.size}px; font-weight:${current_state.weight}; line-height:${current_state.line_height}; align-items:${current_state.v_align}; justify-items:${current_state.align};"><span>${textContent}</span></div>`;
             const svgContainer = `<div class="svg-wrapper" style="${svgPositionStyle}">${svgContent}</div>`;
 
             element.innerHTML = svgContainer + textContainer;
@@ -618,6 +645,9 @@
 
           styleControls.fontSize.value = current_state.size;
           styleControls.fontSizeValue.value = current_state.size;
+          styleControls.lineSpacing.value = current_state.line_height;
+          styleControls.lineSpacingValue.textContent =
+            current_state.line_height;
           styleControls.fontWeightToggle.classList.toggle(
             "control-active",
             current_state.weight === "bold"
@@ -658,7 +688,6 @@
           const doc = parser.parseFromString(svgString, "image/svg+xml");
           const svg = doc.querySelector("svg");
           if (!svg || svg.querySelector("parsererror")) return "";
-
           svg.removeAttribute("style");
           svg.removeAttribute("class");
           svg.setAttribute("width", "100%");
@@ -728,6 +757,11 @@
         styleControls.fontSizeValue.addEventListener("input", (e) =>
           handleFontSizeChange(e.target.value)
         );
+        styleControls.lineSpacing.addEventListener("input", (e) => {
+          state[activeStyleTarget].line_height = e.target.value;
+          updatePreview();
+          syncControlsToState();
+        });
         styleControls.fontWeightToggle.addEventListener("click", () => {
           state[activeStyleTarget].weight =
             state[activeStyleTarget].weight === "bold" ? "normal" : "bold";
