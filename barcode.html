@@ -6,7 +6,7 @@
     <title>Custom Thermal Label Designer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -588,18 +588,12 @@
             </div>
           </div>
         </div>
-        <div class="mt-6 flex gap-4">
+        <div class="mt-6">
           <button
             id="save-settings-button"
             class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg"
           >
             Save Settings
-          </button>
-          <button
-            id="load-settings-button"
-            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            Load Settings
           </button>
         </div>
       </div>
@@ -700,7 +694,6 @@
         };
         const settingsButtons = {
           save: document.getElementById("save-settings-button"),
-          load: document.getElementById("load-settings-button"),
         };
 
         let state = {
@@ -1114,19 +1107,9 @@
             state = savedSettings.labelState;
             logoState = savedSettings.logoState;
             syncAllUi();
-            console.log("Settings loaded.");
           }
         }
         settingsButtons.save.addEventListener("click", saveSettings);
-        settingsButtons.load.addEventListener("click", () => {
-          if (
-            confirm(
-              "Are you sure you want to load the last saved settings? Any unsaved changes will be lost."
-            )
-          ) {
-            loadSettings();
-          }
-        });
 
         const dimControls = {
           width: document.getElementById("label-width"),
