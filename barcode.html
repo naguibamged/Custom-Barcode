@@ -29,6 +29,51 @@
       input[type="number"] {
         -moz-appearance: textfield;
       }
+      /* Toggle Switch CSS */
+      .toggle-container {
+        display: flex;
+        align-items: center;
+      }
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+        margin-left: auto;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #4b5563;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .toggle-slider {
+        background-color: #06b6d4;
+      }
+      input:checked + .toggle-slider:before {
+        transform: translateX(16px);
+      }
       @media print {
         #controls-panel,
         #settings-modal,
@@ -532,7 +577,30 @@
                 </button>
               </div>
             </div>
+            <div class="toggle-container">
+              <label for="logo-line-toggle" class="text-sm"
+                >Show Separator Line</label
+              >
+              <label class="toggle-switch">
+                <input type="checkbox" id="logo-line-toggle" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
           </div>
+        </div>
+        <div class="mt-6 flex gap-4">
+          <button
+            id="save-settings-button"
+            class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            Save Settings
+          </button>
+          <button
+            id="load-settings-button"
+            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            Load Settings
+          </button>
         </div>
       </div>
     </div>
@@ -628,10 +696,16 @@
           size: document.getElementById("logo-svg-size"),
           sizeValue: document.getElementById("logo-svg-size-value"),
           position: document.getElementById("logo-svg-position-buttons"),
+          lineToggle: document.getElementById("logo-line-toggle"),
+        };
+        const settingsButtons = {
+          save: document.getElementById("save-settings-button"),
+          load: document.getElementById("load-settings-button"),
         };
 
         let state = {
           label1: {
+            text: "",
             size: 16,
             weight: "normal",
             align: "center",
@@ -643,6 +717,7 @@
             svg_size: 24,
           },
           label2: {
+            text: "",
             size: 16,
             weight: "normal",
             align: "center",
@@ -658,6 +733,7 @@
           svg_name: "none",
           svg_position: "left",
           svg_size: 24,
+          line_enabled: false,
         };
         let activeStyleTarget = "label1";
         let svgLibrary = [];
@@ -671,6 +747,7 @@
 
             // --- SETUP ---
             const rawText = textInputs[key].value;
+            state[key].text = rawText; // Save text to state
             const textWithBreaks = rawText.replace(/\n/g, "<br>");
             const textContent = convertToArabicNumerals(textWithBreaks);
             let paddings = { top: 4, right: 4, bottom: 4, left: 4 };
@@ -685,25 +762,32 @@
               const logoSvgStyle = `style="width:${logoState.svg_size}px; height:${logoState.svg_size}px;"`;
               const singleLogoSvgHtml = `<div class="svg-instance" ${logoSvgStyle}>${selectedLogoData.svg}</div>`;
               const logoSvgContent = singleLogoSvgHtml;
-
               let logoPositionStyle = "";
-              const logoPaddingSize = parseInt(logoState.svg_size, 10) + 8;
+
+              let logoPaddingSize = parseInt(logoState.svg_size, 10) + 8;
+              if (logoState.line_enabled) {
+                logoPaddingSize += 5; // Add space for line and gap
+              }
+
+              const lineStyle = logoState.line_enabled
+                ? "1px solid #ccc"
+                : "0px solid transparent";
 
               switch (logoState.svg_position) {
                 case "left":
-                  logoPositionStyle = `position:absolute; left:4px; top:0; bottom:0; display:flex; align-items:center; z-index: 10;`;
+                  logoPositionStyle = `position:absolute; left:4px; top:0; bottom:0; display:flex; align-items:center; z-index: 10; padding-right: 4px; border-right: ${lineStyle};`;
                   element.style.paddingLeft = `${logoPaddingSize}px`;
                   break;
                 case "right":
-                  logoPositionStyle = `position:absolute; right:4px; top:0; bottom:0; display:flex; align-items:center; z-index: 10;`;
+                  logoPositionStyle = `position:absolute; right:4px; top:0; bottom:0; display:flex; align-items:center; z-index: 10; padding-left: 4px; border-left: ${lineStyle};`;
                   element.style.paddingRight = `${logoPaddingSize}px`;
                   break;
                 case "top":
-                  logoPositionStyle = `position:absolute; top:4px; left:0; right:0; display:flex; justify-content:center; z-index: 10;`;
+                  logoPositionStyle = `position:absolute; top:4px; left:0; right:0; display:flex; justify-content:center; z-index: 10; padding-bottom: 4px; border-bottom: ${lineStyle};`;
                   element.style.paddingTop = `${logoPaddingSize}px`;
                   break;
                 case "bottom":
-                  logoPositionStyle = `position:absolute; bottom:4px; left:0; right:0; display:flex; justify-content:center; z-index: 10;`;
+                  logoPositionStyle = `position:absolute; bottom:4px; left:0; right:0; display:flex; justify-content:center; z-index: 10; padding-top: 4px; border-top: ${lineStyle};`;
                   element.style.paddingBottom = `${logoPaddingSize}px`;
                   break;
               }
@@ -720,13 +804,11 @@
               const svgStyle = `style="width:${current_state.svg_size}px; height:${current_state.svg_size}px;"`;
               const singleSvgHtml = `<div class="svg-instance" ${svgStyle}>${selectedSvgData.svg}</div>`;
               const svgContent = singleSvgHtml.repeat(current_state.svg_count);
-
               let svgPositionStyle = "display:none;";
               const sizeWithGap = parseInt(current_state.svg_size, 10) + 8;
               const totalSvgWidth =
                 (parseInt(current_state.svg_size, 10) + 2) *
                 current_state.svg_count;
-
               const logoPaddingLeft = parseInt(element.style.paddingLeft || 0);
               const logoPaddingRight = parseInt(
                 element.style.paddingRight || 0
@@ -776,7 +858,6 @@
             tab.classList.remove("control-active")
           );
           styleControls.tabs[activeStyleTarget].classList.add("control-active");
-
           styleControls.fontSize.value = current_state.size;
           styleControls.fontSizeValue.value = current_state.size;
           styleControls.lineSpacing.value = current_state.line_height;
@@ -802,7 +883,6 @@
                 btn.dataset.vAlign === current_state.v_align
               )
             );
-
           imageControls.select.value = current_state.svg_name;
           imageControls.count.value = current_state.svg_count;
           imageControls.size.value = current_state.svg_size;
@@ -815,6 +895,14 @@
                 btn.dataset.pos === current_state.svg_position
               )
             );
+        }
+
+        function syncAllUi() {
+          textInputs.label1.value = state.label1.text;
+          textInputs.label2.value = state.label2.text;
+          syncControlsToState();
+          syncLogoControlsToState();
+          updatePreview();
         }
 
         function sanitizeSvg(svgString) {
@@ -848,7 +936,6 @@
             galleryItem.className = "bg-gray-700 p-2 rounded-lg text-center";
             galleryItem.innerHTML = `<div class="h-20 w-full text-white">${item.svg}</div><p class="text-sm mt-2 truncate">${item.name}</p><button data-index="${index}" class="delete-svg-btn text-xs text-red-400 mt-1">Delete</button>`;
             svgModalControls.gallery.appendChild(galleryItem);
-
             const option = document.createElement("option");
             option.value = item.name;
             option.textContent = item.name;
@@ -973,9 +1060,11 @@
 
         // --- LOGO CONTROL LISTENERS ---
         function syncLogoControlsToState() {
+          if (!logoState) return;
           logoControls.select.value = logoState.svg_name;
           logoControls.size.value = logoState.svg_size;
           logoControls.sizeValue.textContent = `${logoState.svg_size}px`;
+          logoControls.lineToggle.checked = logoState.line_enabled;
           logoControls.position
             .querySelectorAll("button")
             .forEach((btn) =>
@@ -985,12 +1074,10 @@
               )
             );
         }
-
         logoControls.select.addEventListener("change", (e) => {
           logoState.svg_name = e.target.value;
           updatePreview();
         });
-
         logoControls.position.addEventListener("click", (e) => {
           const btn = e.target.closest("button");
           if (btn?.dataset.pos) {
@@ -999,11 +1086,46 @@
             syncLogoControlsToState();
           }
         });
-
         logoControls.size.addEventListener("input", (e) => {
           logoState.svg_size = e.target.value;
           logoControls.sizeValue.textContent = `${e.target.value}px`;
           updatePreview();
+        });
+        logoControls.lineToggle.addEventListener("change", (e) => {
+          logoState.line_enabled = e.target.checked;
+          updatePreview();
+        });
+
+        // --- SAVE & LOAD LISTENERS ---
+        function saveSettings() {
+          const settings = { labelState: state, logoState: logoState };
+          localStorage.setItem(
+            "thermalLabelSettings",
+            JSON.stringify(settings)
+          );
+          alert("Settings saved!");
+        }
+        function loadSettings() {
+          const savedSettingsJSON = localStorage.getItem(
+            "thermalLabelSettings"
+          );
+          if (savedSettingsJSON) {
+            const savedSettings = JSON.parse(savedSettingsJSON);
+            state = savedSettings.labelState;
+            logoState = savedSettings.logoState;
+            syncAllUi();
+            console.log("Settings loaded.");
+          }
+        }
+        settingsButtons.save.addEventListener("click", saveSettings);
+        settingsButtons.load.addEventListener("click", () => {
+          if (
+            confirm(
+              "Are you sure you want to load the last saved settings? Any unsaved changes will be lost."
+            )
+          ) {
+            loadSettings();
+          }
         });
 
         const dimControls = {
@@ -1041,11 +1163,11 @@
           .getElementById("print-button")
           .addEventListener("click", () => window.print());
 
+        // --- INITIALIZE APP ---
         loadSvgs();
+        loadSettings(); // Auto-load settings on start
         updateDimensionsAndPrint();
-        updatePreview();
-        syncControlsToState();
-        syncLogoControlsToState();
+        syncAllUi();
       });
     </script>
   </body>
