@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale-1.0" />
     <title>Custom Thermal Label Designer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,8 +18,8 @@
         print-color-adjust: exact !important;
       }
       .control-active {
-        background-color: #06b6d4 !important; /* cyan-500 */
-        color: #111827 !important; /* gray-900 */
+        background-color: #06b6d4 !important;
+        color: #111827 !important;
       }
       input[type="number"]::-webkit-inner-spin-button,
       input[type="number"]::-webkit-outer-spin-button {
@@ -31,7 +31,8 @@
       }
       @media print {
         #controls-panel,
-        #settings-modal {
+        #settings-modal,
+        #svg-library-modal {
           display: none;
         }
         .print-hidden {
@@ -82,7 +83,7 @@
           </div>
           <button
             id="settings-button"
-            class="p-2 rounded-full hover:bg-gray-700 transition-colors"
+            class="p-2 rounded-full hover:bg-gray-700"
             aria-label="Open settings"
           >
             <svg
@@ -106,69 +107,47 @@
             </svg>
           </button>
         </div>
-
         <div class="bg-gray-700 p-4 rounded-lg">
           <h2 class="text-lg font-semibold mb-3 border-b border-gray-600 pb-2">
             Label Content
           </h2>
           <div class="space-y-4">
             <div>
-              <label
-                for="text-label1"
-                class="block text-sm font-medium text-gray-300"
-                >Label 1 Text</label
-              >
-              <textarea
+              <label for="text-label1" class="block text-sm">Label 1 Text</label
+              ><textarea
                 id="text-label1"
                 rows="2"
-                class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
-                placeholder="Text for the top label..."
+                class="mt-1 block w-full bg-gray-800 rounded-md p-2"
                 dir="auto"
               ></textarea>
             </div>
             <div>
-              <label
-                for="text-label2"
-                class="block text-sm font-medium text-gray-300"
-                >Label 2 Text</label
-              >
-              <textarea
+              <label for="text-label2" class="block text-sm">Label 2 Text</label
+              ><textarea
                 id="text-label2"
                 rows="2"
-                class="mt-1 block w-full bg-gray-800 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
-                placeholder="Text for the bottom label..."
+                class="mt-1 block w-full bg-gray-800 rounded-md p-2"
                 dir="auto"
               ></textarea>
             </div>
           </div>
         </div>
-
         <div class="bg-gray-700 p-4 rounded-lg space-y-4">
           <div
             class="flex items-center justify-between border-b border-gray-600 pb-2"
           >
             <h2 class="text-lg font-semibold">Styling</h2>
             <div id="styling-tabs" class="flex p-1 bg-gray-800 rounded-lg">
-              <button
-                id="tab-label1"
-                class="px-3 py-1 text-sm font-medium rounded-md control-active"
-              >
-                Label 1
-              </button>
-              <button
-                id="tab-label2"
-                class="px-3 py-1 text-sm font-medium rounded-md"
-              >
+              <button id="tab-label1" class="px-3 py-1 text-sm rounded-md">
+                Label 1</button
+              ><button id="tab-label2" class="px-3 py-1 text-sm rounded-md">
                 Label 2
               </button>
             </div>
           </div>
-
           <div class="space-y-4">
             <div class="grid grid-cols-3 items-center gap-4">
-              <label
-                for="font-size"
-                class="text-sm font-medium text-gray-300 col-span-1"
+              <label for="font-size" class="text-sm col-span-1"
                 >Font Size</label
               >
               <div class="col-span-2 flex items-center gap-3">
@@ -177,38 +156,32 @@
                   id="font-size"
                   min="8"
                   max="48"
-                  value="16"
-                  class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-                />
-                <input
+                  class="w-full"
+                /><input
                   type="number"
                   id="font-size-value"
                   min="8"
                   max="48"
-                  value="16"
-                  class="w-16 p-1 text-center bg-gray-800 border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
+                  class="w-16 p-1 text-center bg-gray-800 rounded-md"
                 />
               </div>
             </div>
-
             <div class="grid grid-cols-3 items-center gap-4">
-              <label class="text-sm font-medium text-gray-300 col-span-1"
-                >Style</label
-              >
+              <label class="text-sm col-span-1">Text Style</label>
               <div class="col-span-2 flex items-center gap-2 flex-wrap">
                 <button
                   id="font-weight-toggle"
-                  class="p-2 w-10 h-10 bg-gray-800 rounded-md flex items-center justify-center font-bold text-lg hover:bg-gray-600"
+                  class="p-2 w-10 h-10 bg-gray-800 rounded-md font-bold"
                 >
                   B
                 </button>
                 <div
                   id="text-align-buttons"
-                  class="flex items-center bg-gray-800 rounded-md"
+                  class="flex bg-gray-800 rounded-md"
                 >
                   <button
                     data-align="left"
-                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-l-md"
+                    class="p-2 w-10 h-10"
                     title="Align Left"
                   >
                     <svg
@@ -220,11 +193,10 @@
                         fill-rule="evenodd"
                         d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 9.75A.75.75 0 012.75 9h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 9.75zM2.75 14a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H2.75z"
                       />
-                    </svg>
-                  </button>
-                  <button
+                    </svg></button
+                  ><button
                     data-align="center"
-                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600"
+                    class="p-2 w-10 h-10"
                     title="Align Center"
                   >
                     <svg
@@ -236,11 +208,10 @@
                         fill-rule="evenodd"
                         d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM4.75 9a.75.75 0 01.75-.75h8.5a.75.75 0 010 1.5h-8.5A.75.75 0 014.75 9zm-2 4.75A.75.75 0 012.75 13h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
                       />
-                    </svg>
-                  </button>
-                  <button
+                    </svg></button
+                  ><button
                     data-align="right"
-                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-r-md"
+                    class="p-2 w-10 h-10"
                     title="Align Right"
                   >
                     <svg
@@ -257,11 +228,11 @@
                 </div>
                 <div
                   id="vertical-align-buttons"
-                  class="flex items-center bg-gray-800 rounded-md"
+                  class="flex bg-gray-800 rounded-md"
                 >
                   <button
                     data-v-align="start"
-                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-l-md"
+                    class="p-2 w-10 h-10"
                     title="Align Top"
                   >
                     <svg
@@ -276,11 +247,10 @@
                         stroke-width="2"
                         d="M3 4h18M3 8h18M9 14h6v-4H9v4z"
                       ></path>
-                    </svg>
-                  </button>
-                  <button
+                    </svg></button
+                  ><button
                     data-v-align="center"
-                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600"
+                    class="p-2 w-10 h-10"
                     title="Align Middle"
                   >
                     <svg
@@ -295,11 +265,10 @@
                         stroke-width="2"
                         d="M9 12h6M3 4h18M3 20h18"
                       ></path>
-                    </svg>
-                  </button>
-                  <button
+                    </svg></button
+                  ><button
                     data-v-align="end"
-                    class="p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-600 rounded-r-md"
+                    class="p-2 w-10 h-10"
                     title="Align Bottom"
                   >
                     <svg
@@ -322,9 +291,90 @@
           </div>
         </div>
 
+        <div class="bg-gray-700 p-4 rounded-lg space-y-4">
+          <div
+            class="flex items-center justify-between border-b border-gray-600 pb-2"
+          >
+            <h2 class="text-lg font-semibold">Image & Icon</h2>
+            <button
+              id="manage-svgs-button"
+              class="text-sm bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg"
+            >
+              Manage SVGs
+            </button>
+          </div>
+          <div class="grid grid-cols-3 items-center gap-4">
+            <label for="svg-select" class="text-sm col-span-1">Select SVG</label
+            ><select
+              id="svg-select"
+              class="col-span-2 bg-gray-800 rounded-md p-2"
+            >
+              <option value="none">None</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-3 items-center gap-4">
+            <label for="svg-size" class="text-sm col-span-1">Icon Size</label>
+            <div class="col-span-2 flex items-center gap-3">
+              <input
+                type="range"
+                id="svg-size"
+                min="12"
+                max="96"
+                value="24"
+                class="w-full"
+              /><span
+                id="svg-size-value"
+                class="w-16 p-1 text-center bg-gray-800 rounded-md"
+                >24px</span
+              >
+            </div>
+          </div>
+          <div class="grid grid-cols-3 items-center gap-4">
+            <label for="svg-count" class="text-sm col-span-1">Repetitions</label
+            ><input
+              type="number"
+              id="svg-count"
+              min="1"
+              max="10"
+              value="1"
+              class="w-20 p-1 text-center bg-gray-800 rounded-md"
+            />
+          </div>
+          <div class="grid grid-cols-3 items-center gap-4">
+            <label class="text-sm col-span-1">Position</label>
+            <div id="svg-position-buttons" class="flex bg-gray-800 rounded-md">
+              <button
+                data-pos="left"
+                class="p-2 w-10 h-10"
+                title="Position Left"
+              >
+                L</button
+              ><button
+                data-pos="right"
+                class="p-2 w-10 h-10"
+                title="Position Right"
+              >
+                R</button
+              ><button
+                data-pos="top"
+                class="p-2 w-10 h-10"
+                title="Position Top"
+              >
+                T</button
+              ><button
+                data-pos="bottom"
+                class="p-2 w-10 h-10"
+                title="Position Bottom"
+              >
+                B
+              </button>
+            </div>
+          </div>
+        </div>
+
         <button
           id="print-button"
-          class="w-full bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-bold py-3 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+          class="w-full bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-bold py-3 px-4 rounded-lg"
         >
           Print Label
         </button>
@@ -336,11 +386,11 @@
       >
         <div
           id="label-preview"
-          class="bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 ease-in-out transform scale-100 flex flex-col relative"
+          class="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col relative"
         >
           <div
             id="preview-label1"
-            class="text-black break-words h-1/2 p-2 box-border grid"
+            class="text-black h-1/2 box-border"
             dir="auto"
           ></div>
           <hr
@@ -348,7 +398,7 @@
           />
           <div
             id="preview-label2"
-            class="text-black break-words h-1/2 p-2 box-border grid"
+            class="text-black h-1/2 box-border"
             dir="auto"
           ></div>
         </div>
@@ -359,28 +409,9 @@
       id="settings-modal"
       class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden"
     >
-      <div
-        class="bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md relative"
-      >
-        <button
-          id="close-modal-button"
-          class="absolute top-4 right-4 text-gray-400 hover:text-white"
-          aria-label="Close settings"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+      <div class="bg-gray-800 rounded-2xl p-8 w-full max-w-md relative">
+        <button id="close-settings-button" class="absolute top-4 right-4">
+          ❌
         </button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-6">Settings</h2>
         <div class="bg-gray-700 p-4 rounded-lg">
@@ -389,35 +420,71 @@
           </h3>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label
-                for="label-width"
-                class="block text-sm font-medium text-gray-300"
-                >Width (cm)</label
-              >
-              <input
+              <label for="label-width" class="block text-sm">Width (in)</label
+              ><input
                 type="number"
                 id="label-width"
-                value="5.7"
+                value="2.25"
                 step="0.1"
-                class="mt-1 block w-full bg-gray-900 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
+                class="mt-1 w-full bg-gray-900 rounded-md p-2"
               />
             </div>
             <div>
-              <label
-                for="label-height"
-                class="block text-sm font-medium text-gray-300"
-                >Height (cm)</label
-              >
-              <input
+              <label for="label-height" class="block text-sm">Height (in)</label
+              ><input
                 type="number"
                 id="label-height"
-                value="3.2"
+                value="1.25"
                 step="0.1"
-                class="mt-1 block w-full bg-gray-900 border-gray-600 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 text-white p-2"
+                class="mt-1 w-full bg-gray-900 rounded-md p-2"
               />
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      id="svg-library-modal"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden"
+    >
+      <div class="bg-gray-800 rounded-2xl p-8 w-full max-w-2xl relative">
+        <button id="close-svg-modal-button" class="absolute top-4 right-4">
+          ❌
+        </button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-6">SVG Library</h2>
+        <div class="bg-gray-700 p-4 rounded-lg mb-4 space-y-3">
+          <h3 class="text-lg">Add New SVG</h3>
+          <div class="flex items-end gap-4">
+            <div class="flex-grow">
+              <label for="new-svg-name" class="text-sm">SVG Name</label
+              ><input
+                type="text"
+                id="new-svg-name"
+                placeholder="e.g., Pill, Logo"
+                class="mt-1 w-full bg-gray-900 rounded-md p-2"
+              />
+            </div>
+            <div class="flex-grow">
+              <label for="new-svg-upload" class="text-sm">SVG File</label
+              ><input
+                type="file"
+                id="new-svg-upload"
+                accept=".svg"
+                class="mt-1 w-full text-sm"
+              />
+            </div>
+            <button
+              id="add-svg-button"
+              class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg h-10"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+        <div
+          id="svg-gallery"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-80 overflow-y-auto bg-gray-900 p-4 rounded-lg"
+        ></div>
       </div>
     </div>
 
@@ -432,8 +499,11 @@
           label2: document.getElementById("preview-label2"),
         };
         const labelPreview = document.getElementById("label-preview");
-
         const styleControls = {
+          tabs: {
+            label1: document.getElementById("tab-label1"),
+            label2: document.getElementById("tab-label2"),
+          },
           fontSize: document.getElementById("font-size"),
           fontSizeValue: document.getElementById("font-size-value"),
           fontWeightToggle: document.getElementById("font-weight-toggle"),
@@ -441,188 +511,330 @@
           verticalAlignButtons: document.getElementById(
             "vertical-align-buttons"
           ),
-          tabLabel1: document.getElementById("tab-label1"),
-          tabLabel2: document.getElementById("tab-label2"),
+        };
+        const imageControls = {
+          select: document.getElementById("svg-select"),
+          size: document.getElementById("svg-size"),
+          sizeValue: document.getElementById("svg-size-value"),
+          count: document.getElementById("svg-count"),
+          position: document.getElementById("svg-position-buttons"),
+          manageBtn: document.getElementById("manage-svgs-button"),
+        };
+        const svgModalControls = {
+          modal: document.getElementById("svg-library-modal"),
+          closeBtn: document.getElementById("close-svg-modal-button"),
+          nameInput: document.getElementById("new-svg-name"),
+          fileInput: document.getElementById("new-svg-upload"),
+          addBtn: document.getElementById("add-svg-button"),
+          gallery: document.getElementById("svg-gallery"),
         };
 
-        let styles = {
+        let state = {
           label1: {
             size: 16,
             weight: "normal",
             align: "center",
             v_align: "start",
+            svg_name: "none",
+            svg_count: 1,
+            svg_position: "left",
+            svg_size: 24,
           },
           label2: {
             size: 16,
             weight: "normal",
             align: "center",
             v_align: "start",
+            svg_name: "none",
+            svg_count: 1,
+            svg_position: "left",
+            svg_size: 24,
           },
         };
         let activeStyleTarget = "label1";
+        let svgLibrary = [];
 
         function updatePreview() {
-          Object.keys(textInputs).forEach((key) => {
-            const style = styles[key];
+          Object.keys(previewElements).forEach((key) => {
+            const current_state = state[key];
             const element = previewElements[key];
             const textContent = convertToArabicNumerals(textInputs[key].value);
-            element.innerHTML = `<span>${textContent}</span>`;
-            const span = element.querySelector("span");
-            if (span) {
-              span.style.fontSize = `${style.size}px`;
-              span.style.fontWeight = style.weight;
+            const selectedSvgData = svgLibrary.find(
+              (item) => item.name === current_state.svg_name
+            );
+
+            element.style.position = "relative"; // Parent must be relative for absolute positioning of children
+            element.innerHTML = ""; // Clear previous content
+
+            let svgContent = "";
+            if (selectedSvgData) {
+              const svgStyle = `style="width:${current_state.svg_size}px; height:${current_state.svg_size}px;"`;
+              const singleSvgHtml = `<div class="svg-instance" ${svgStyle}>${selectedSvgData.svg}</div>`;
+              svgContent = singleSvgHtml.repeat(current_state.svg_count);
             }
-            element.style.alignItems = style.v_align;
-            element.style.justifyItems = style.align;
+
+            let textPadding = "padding: 4px;";
+            let svgPositionStyle = "display:none;";
+
+            if (current_state.svg_name !== "none" && svgContent) {
+              const sizeWithGap = current_state.svg_size + 8; // 8px for gap
+              switch (current_state.svg_position) {
+                case "left":
+                  svgPositionStyle = `position:absolute; left:4px; top:0; bottom:0; display:flex; flex-wrap:wrap; align-items:center; gap:2px;`;
+                  textPadding = `padding-left: ${
+                    sizeWithGap * current_state.svg_count
+                  }px;`;
+                  break;
+                case "right":
+                  svgPositionStyle = `position:absolute; right:4px; top:0; bottom:0; display:flex; flex-wrap:wrap; align-items:center; gap:2px;`;
+                  textPadding = `padding-right: ${
+                    sizeWithGap * current_state.svg_count
+                  }px;`;
+                  break;
+                case "top":
+                  svgPositionStyle = `position:absolute; top:4px; left:0; right:0; display:flex; justify-content:center; align-items:center; gap:2px;`;
+                  textPadding = `padding-top: ${sizeWithGap}px;`;
+                  break;
+                case "bottom":
+                  svgPositionStyle = `position:absolute; bottom:4px; left:0; right:0; display:flex; justify-content:center; align-items:center; gap:2px;`;
+                  textPadding = `padding-bottom: ${sizeWithGap}px;`;
+                  break;
+              }
+            }
+
+            const textContainer = `<div class="text-container" style="${textPadding} width:100%; height:100%; display:grid; font-size:${current_state.size}px; font-weight:${current_state.weight}; align-items:${current_state.v_align}; justify-items:${current_state.align};"><span>${textContent}</span></div>`;
+            const svgContainer = `<div class="svg-wrapper" style="${svgPositionStyle}">${svgContent}</div>`;
+
+            element.innerHTML = svgContainer + textContainer;
           });
         }
 
         function syncControlsToState() {
-          const currentStyle = styles[activeStyleTarget];
-          styleControls.fontSize.value = currentStyle.size;
-          styleControls.fontSizeValue.value = currentStyle.size;
+          const current_state = state[activeStyleTarget];
+          Object.values(styleControls.tabs).forEach((tab) =>
+            tab.classList.remove("control-active")
+          );
+          styleControls.tabs[activeStyleTarget].classList.add("control-active");
+
+          styleControls.fontSize.value = current_state.size;
+          styleControls.fontSizeValue.value = current_state.size;
           styleControls.fontWeightToggle.classList.toggle(
             "control-active",
-            currentStyle.weight === "bold"
+            current_state.weight === "bold"
           );
           styleControls.textAlignButtons
             .querySelectorAll("button")
-            .forEach((btn) => {
+            .forEach((btn) =>
               btn.classList.toggle(
                 "control-active",
-                btn.dataset.align === currentStyle.align
-              );
-            });
+                btn.dataset.align === current_state.align
+              )
+            );
           styleControls.verticalAlignButtons
             .querySelectorAll("button")
-            .forEach((btn) => {
+            .forEach((btn) =>
               btn.classList.toggle(
                 "control-active",
-                btn.dataset.vAlign === currentStyle.v_align
-              );
-            });
-          styleControls.tabLabel1.classList.toggle(
-            "control-active",
-            activeStyleTarget === "label1"
-          );
-          styleControls.tabLabel2.classList.toggle(
-            "control-active",
-            activeStyleTarget === "label2"
-          );
+                btn.dataset.vAlign === current_state.v_align
+              )
+            );
+
+          imageControls.select.value = current_state.svg_name;
+          imageControls.count.value = current_state.svg_count;
+          imageControls.size.value = current_state.svg_size;
+          imageControls.sizeValue.textContent = `${current_state.svg_size}px`;
+          imageControls.position
+            .querySelectorAll("button")
+            .forEach((btn) =>
+              btn.classList.toggle(
+                "control-active",
+                btn.dataset.pos === current_state.svg_position
+              )
+            );
         }
 
-        styleControls.tabLabel1.addEventListener("click", () => {
+        function sanitizeSvg(svgString) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(svgString, "image/svg+xml");
+          const svg = doc.querySelector("svg");
+          if (!svg || svg.querySelector("parsererror")) return "";
+
+          svg.removeAttribute("style");
+          svg.removeAttribute("class");
+          svg.setAttribute("width", "100%");
+          svg.setAttribute("height", "100%");
+          svg.setAttribute("fill", "currentColor");
+          svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+          return svg.outerHTML;
+        }
+
+        function loadSvgs() {
+          svgLibrary = JSON.parse(localStorage.getItem("svgLibrary") || "[]");
+          renderSvgLibrary();
+        }
+        function saveSvgs() {
+          localStorage.setItem("svgLibrary", JSON.stringify(svgLibrary));
+          renderSvgLibrary();
+        }
+        function renderSvgLibrary() {
+          svgModalControls.gallery.innerHTML = "";
+          imageControls.select.innerHTML = '<option value="none">None</option>';
+          svgLibrary.forEach((item, index) => {
+            const galleryItem = document.createElement("div");
+            galleryItem.className = "bg-gray-700 p-2 rounded-lg text-center";
+            galleryItem.innerHTML = `<div class="h-20 w-full text-white">${item.svg}</div><p class="text-sm mt-2 truncate">${item.name}</p><button data-index="${index}" class="delete-svg-btn text-xs text-red-400 mt-1">Delete</button>`;
+            svgModalControls.gallery.appendChild(galleryItem);
+            const option = document.createElement("option");
+            option.value = item.name;
+            option.textContent = item.name;
+            imageControls.select.appendChild(option);
+          });
+        }
+        function addSvg(name, svgString) {
+          if (!name.trim() || !svgString)
+            return alert("SVG Name and File are required.");
+          if (svgLibrary.some((item) => item.name === name))
+            return alert("An SVG with this name already exists.");
+          const sanitized = sanitizeSvg(svgString);
+          if (!sanitized) return alert("Invalid or corrupt SVG file.");
+          svgLibrary.push({ name, svg: sanitized });
+          saveSvgs();
+          svgModalControls.nameInput.value = "";
+          svgModalControls.fileInput.value = "";
+        }
+
+        Object.values(textInputs).forEach((input) =>
+          input.addEventListener("input", updatePreview)
+        );
+        styleControls.tabs.label1.addEventListener("click", () => {
           activeStyleTarget = "label1";
           syncControlsToState();
         });
-        styleControls.tabLabel2.addEventListener("click", () => {
+        styleControls.tabs.label2.addEventListener("click", () => {
           activeStyleTarget = "label2";
           syncControlsToState();
         });
-
-        const handleFontSizeChange = (newValue) => {
-          const size = Math.max(8, Math.min(48, parseInt(newValue, 10) || 8));
-          styles[activeStyleTarget].size = size;
-          styleControls.fontSize.value = size;
-          styleControls.fontSizeValue.value = size;
+        const handleFontSizeChange = (v) => {
+          state[activeStyleTarget].size = Math.max(
+            8,
+            Math.min(48, parseInt(v, 10) || 8)
+          );
           updatePreview();
+          syncControlsToState();
         };
-
         styleControls.fontSize.addEventListener("input", (e) =>
           handleFontSizeChange(e.target.value)
         );
         styleControls.fontSizeValue.addEventListener("input", (e) =>
           handleFontSizeChange(e.target.value)
         );
-
         styleControls.fontWeightToggle.addEventListener("click", () => {
-          styles[activeStyleTarget].weight =
-            styles[activeStyleTarget].weight === "bold" ? "normal" : "bold";
+          state[activeStyleTarget].weight =
+            state[activeStyleTarget].weight === "bold" ? "normal" : "bold";
           updatePreview();
           syncControlsToState();
         });
-
         styleControls.textAlignButtons.addEventListener("click", (e) => {
-          const button = e.target.closest("button");
-          if (button && button.dataset.align) {
-            styles[activeStyleTarget].align = button.dataset.align;
+          const btn = e.target.closest("button");
+          if (btn?.dataset.align) {
+            state[activeStyleTarget].align = btn.dataset.align;
             updatePreview();
             syncControlsToState();
           }
         });
-
         styleControls.verticalAlignButtons.addEventListener("click", (e) => {
-          const button = e.target.closest("button");
-          if (button && button.dataset.vAlign) {
-            styles[activeStyleTarget].v_align = button.dataset.vAlign;
+          const btn = e.target.closest("button");
+          if (btn?.dataset.vAlign) {
+            state[activeStyleTarget].v_align = btn.dataset.vAlign;
             updatePreview();
             syncControlsToState();
           }
         });
-
-        Object.values(textInputs).forEach((input) =>
-          input.addEventListener("input", updatePreview)
+        imageControls.manageBtn.addEventListener("click", () =>
+          svgModalControls.modal.classList.remove("hidden")
         );
-
+        imageControls.select.addEventListener("change", (e) => {
+          state[activeStyleTarget].svg_name = e.target.value;
+          updatePreview();
+        });
+        imageControls.count.addEventListener("input", (e) => {
+          state[activeStyleTarget].svg_count = Math.max(
+            1,
+            parseInt(e.target.value, 10) || 1
+          );
+          updatePreview();
+        });
+        imageControls.position.addEventListener("click", (e) => {
+          const btn = e.target.closest("button");
+          if (btn?.dataset.pos) {
+            state[activeStyleTarget].svg_position = btn.dataset.pos;
+            updatePreview();
+            syncControlsToState();
+          }
+        });
+        imageControls.size.addEventListener("input", (e) => {
+          state[activeStyleTarget].svg_size = e.target.value;
+          imageControls.sizeValue.textContent = `${e.target.value}px`;
+          updatePreview();
+        });
+        svgModalControls.closeBtn.addEventListener("click", () =>
+          svgModalControls.modal.classList.add("hidden")
+        );
+        svgModalControls.addBtn.addEventListener("click", () => {
+          const n = svgModalControls.nameInput.value,
+            f = svgModalControls.fileInput.files[0];
+          if (f) {
+            const r = new FileReader();
+            r.onload = (e) => addSvg(n, e.target.result);
+            r.readAsText(f);
+          } else {
+            alert("Please select a file.");
+          }
+        });
+        svgModalControls.gallery.addEventListener("click", (e) => {
+          if (e.target.classList.contains("delete-svg-btn")) {
+            if (confirm("Are you sure?")) {
+              svgLibrary.splice(e.target.dataset.index, 1);
+              saveSvgs();
+            }
+          }
+        });
         const dimControls = {
           width: document.getElementById("label-width"),
           height: document.getElementById("label-height"),
         };
         const dynamicPrintStyles = document.createElement("style");
         document.head.appendChild(dynamicPrintStyles);
-
-        // --- MODIFICATION 2: JS logic updated to use CM ---
         function updateDimensionsAndPrint() {
-          const widthCm = parseFloat(dimControls.width.value) || 5.7;
-          const heightCm = parseFloat(dimControls.height.value) || 3.2;
-
-          // Convert CM to pixels for screen preview (approx. 37.8px per cm)
-          labelPreview.style.width = `${widthCm * 37.8}px`;
-          labelPreview.style.height = `${heightCm * 37.8}px`;
-
-          // Use CM unit for the print stylesheet
-          dynamicPrintStyles.innerHTML = `@media print { @page { size: ${widthCm}cm ${heightCm}cm; margin: 0; } }`;
+          const w = parseFloat(dimControls.width.value) || 2.25,
+            h = parseFloat(dimControls.height.value) || 1.25;
+          labelPreview.style.width = `${w * 96}px`;
+          labelPreview.style.height = `${h * 96}px`;
+          dynamicPrintStyles.innerHTML = `@media print { @page { size: ${w}in ${h}in; margin: 0; } }`;
         }
-        Object.values(dimControls).forEach((control) =>
-          control.addEventListener("input", updateDimensionsAndPrint)
+        Object.values(dimControls).forEach((c) =>
+          c.addEventListener("input", updateDimensionsAndPrint)
         );
-
-        function convertToArabicNumerals(text) {
-          const arabicNumerals = [
-            "٠",
-            "١",
-            "٢",
-            "٣",
-            "٤",
-            "٥",
-            "٦",
-            "٧",
-            "٨",
-            "٩",
-          ];
-          return String(text).replace(
-            /[0-9]/g,
-            (digit) => arabicNumerals[parseInt(digit)]
-          );
+        function convertToArabicNumerals(t) {
+          const a = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+          return String(t).replace(/[0-9]/g, (d) => a[parseInt(d)]);
         }
-        const settingsButton = document.getElementById("settings-button");
         const settingsModal = document.getElementById("settings-modal");
-        const closeModalButton = document.getElementById("close-modal-button");
-        const printButton = document.getElementById("print-button");
-        settingsButton.addEventListener("click", () =>
-          settingsModal.classList.remove("hidden")
-        );
-        closeModalButton.addEventListener("click", () =>
-          settingsModal.classList.add("hidden")
-        );
-        settingsModal.addEventListener("click", (e) => {
-          if (e.target === settingsModal) settingsModal.classList.add("hidden");
-        });
-        window.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && !settingsModal.classList.contains("hidden"))
-            settingsModal.classList.add("hidden");
-        });
-        printButton.addEventListener("click", () => window.print());
+        document
+          .getElementById("settings-button")
+          .addEventListener("click", () =>
+            settingsModal.classList.remove("hidden")
+          );
+        document
+          .getElementById("close-settings-button")
+          .addEventListener("click", () =>
+            settingsModal.classList.add("hidden")
+          );
+        document
+          .getElementById("print-button")
+          .addEventListener("click", () => window.print());
+
+        loadSvgs();
         updateDimensionsAndPrint();
         updatePreview();
         syncControlsToState();
